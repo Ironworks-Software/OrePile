@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sorry Folks, We're Closed!</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #87CEEB 0%, #1E90FF 100%);
+            color: white;
+            height: 100vh;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        .container {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 40px;
+            border-radius: 15px;
+            max-width: 600px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+
+        h1 {
+            font-size: 3em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .mascot {
+            font-size: 5em;
+            margin-bottom: 20px;
+            animation: wave 2s infinite;
+            cursor: pointer;
+        }
+
+        .message {
+            font-size: 1.5em;
+            margin-bottom: 30px;
+            line-height: 1.4;
+        }
+
+        .signature {
+            font-style: italic;
+            font-size: 1.2em;
+            margin-top: 20px;
+            cursor: pointer;
+        }
+
+        .car {
+            position: absolute;
+            font-size: 2em;
+            left: -50px;
+            top: 50%;
+            opacity: 0;
+            transition: all 0.5s;
+            cursor: pointer;
+        }
+
+        .car.drive {
+            animation: driveby 3s linear;
+        }
+
+        .hidden-message {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 10px;
+            border-radius: 5px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+
+        .easter-egg {
+            opacity: 0;
+            position: absolute;
+            transition: opacity 0.3s;
+        }
+
+        #pool {
+            bottom: -20px;
+            right: -20px;
+            font-size: 1.5em;
+            cursor: pointer;
+        }
+
+        #sandwich {
+            top: -20px;
+            left: -20px;
+            font-size: 1.5em;
+            cursor: pointer;
+        }
+
+        @keyframes wave {
+
+            0%,
+            100% {
+                transform: rotate(0deg);
+            }
+
+            25% {
+                transform: rotate(-10deg);
+            }
+
+            75% {
+                transform: rotate(10deg);
+            }
+        }
+
+        @keyframes driveby {
+            from {
+                left: -50px;
+                opacity: 1;
+            }
+
+            to {
+                left: calc(100% + 50px);
+                opacity: 1;
+            }
+        }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2em;
+            }
+
+            .message {
+                font-size: 1.2em;
+            }
+        }
+
+        .counter {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            font-size: 0.8em;
+            opacity: 0.5;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="mascot" title="Click me!" onclick="mooseClick()">🎢</div>
+        <h1>Sorry, Folks!</h1>
+        <div class="message"> The park's closed for two weeks to clean and repair America's favorite family fun park!
+        </div>
+        <div class="signature" onclick="toggleMessage(this, 'Holiday rooooooooad! 🎵')" title="Click me!"> - Marty Moose
+            🦌 </div>
+        <div class="car">🚗</div>
+        <div id="pool" class="easter-egg" onclick="toggleMessage(this, 'Do you think you could swim to the deep end?')"
+            title="Christie Brinkley's pool">🏊‍♂️</div>
+        <div id="sandwich" class="easter-egg" onclick="toggleMessage(this, 'Real tomato ketchup, Eddie?')"
+            title="Click for a snack">🥪</div>
+        <div class="counter" id="visits">Miles to Walley World: 2,460</div>
+    </div>
+    <script>
+        let clicks = 0;
+        let lastClick = 0;
+
+        function mooseClick() {
+            const now = Date.now();
+            if (now - lastClick < 300) {
+                clicks++;
+                if (clicks === 3) {
+                    const car = document.querySelector('.car');
+                    car.classList.add('drive');
+                    setTimeout(() => {
+                        car.classList.remove('drive');
+                        clicks = 0;
+                    }, 3000);
+                }
+            } else {
+                clicks = 1;
+            }
+            lastClick = now;
+        }
+
+        function toggleMessage(element, message) {
+            let msgElement = element.querySelector('.hidden-message');
+            if (!msgElement) {
+                msgElement = document.createElement('div');
+                msgElement.className = 'hidden-message';
+                msgElement.textContent = message;
+                element.appendChild(msgElement);
+            }
+            msgElement.style.opacity = msgElement.style.opacity === '1' ? '0' : '1';
+            setTimeout(() => msgElement.style.opacity = '0', 2000);
+        }
+
+        // Show easter eggs randomly
+        setTimeout(() => {
+            document.getElementById('pool').style.opacity = '1';
+            document.getElementById('sandwich').style.opacity = '1';
+        }, 5000);
+
+        // Update the counter
+        let miles = 2460;
+        setInterval(() => {
+            miles = Math.max(0, miles - 1);
+            document.getElementById('visits').textContent = `Miles to Walley World: ${miles}`;
+        }, 1000);
+    </script>
+</body>
+
+</html>
